@@ -7,6 +7,7 @@ import TakePromptByAudio as tpba
 import tkinter as tk
 from googletrans import Translator
 import keyboard
+import time
 
 import undetected_chromedriver as uc
 
@@ -17,7 +18,7 @@ delete_prompt = False
 delete_choice = input("Would you like to delete prompt from your account after program is finished(Yes/No):")
 
 while delete_choice.lower() != "yes" and delete_choice.lower() != "no":
-    delete_choice = input("Choose One Of The Above Choices")
+    delete_choice = input("Choose One Of The Above Choices:")
 
 if delete_choice.lower() == "yes" : delete_prompt = True
 
@@ -25,7 +26,7 @@ try:
     prompt = tpba.Take_Data()
     print("Gpt Answering...\n\n")
 
-    explorer = uc.Chrome(use_subprocess=True)
+    explorer = uc.Chrome(use_subprocess = True)
     explorer.maximize_window()
     explorer.get("https://chat.openai.com/auth/login")
 
@@ -40,13 +41,22 @@ try:
             pass
 
     explorer.get("https://chat.openai.com/")
+    explorer.implicitly_wait(15)
+    time.sleep(5)
+    try:
+        buttons = explorer.find_elements(By.XPATH, '//*[@class="flex w-full gap-2 items-center justify-center"]')
+        buttons[-1].click()
+    except:
+        pass
 
-    WebDriverWait(explorer, 5).until(Ec.visibility_of_element_located((By.XPATH, '//*[@id="radix-:rf:"]/div[2]/div/div[4]/button/div'))).click()
+    #WebDriverWait(explorer, 5).until(Ec.visibility_of_element_located((By.XPATH, '//*[@id="radix-:ro:"]/div[2]/div/div[4]/button/div'))).click()
     number = 2
+
+
     while continue_program:
         WebDriverWait(explorer,10).until(Ec.visibility_of_element_located((By.CSS_SELECTOR,'#prompt-textarea'))).send_keys(prompt, Keys.ENTER)
 
-        WebDriverWait(explorer,90).until(Ec.visibility_of_element_located((By.XPATH,  f'//*[@id="__next"]/div[1]/div[2]/div/main/div/div[1]/div/div/div/div[{number}]/div/div/div[2]/div[2]/div/button'))).click()
+        WebDriverWait(explorer,90).until(Ec.visibility_of_element_located((By.XPATH,  f'//*[@id="__next"]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div[{number}]/div/div/div[2]/div/div[2]/div/button'))).click()
 
         root = tk.Tk()
 
@@ -74,5 +84,5 @@ try:
 
     explorer.close()
 
-except:
+except Exception:
     pass
