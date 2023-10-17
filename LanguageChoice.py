@@ -11,6 +11,6 @@ def Choose_Language():
                 print("1-Azerbaijani\n2-English\n3-Turkish\n4-Russian\n5-French\n6-Chinese\n7-Japanese\n8-Spanish")
                 language_num = int(input("Choose one of the above languages:"))
 
-            return languages[list_lan[language_num]]
+            return languages[list_lan[language_num - 1]]
         except:
             pass
